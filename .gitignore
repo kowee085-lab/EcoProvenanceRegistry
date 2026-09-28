@@ -1,0 +1,8 @@
+node_modules/
+.env
+cache/
+artifacts/
+subgraph/generated/
+subgraph/build/
+coverage/
+coverage.json
