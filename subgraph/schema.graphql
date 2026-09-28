@@ -1,0 +1,79 @@
+"""
+A registered ecological dataset (e.g. "Amazon Basin Canopy Cover 2026").
+"""
+type Dataset @entity {
+  id: ID! # datasetId as string
+  datasetId: BigInt!
+  owner: Bytes!
+  name: String!
+  category: String!
+  createdAt: BigInt!
+  createdAtBlock: BigInt!
+  txHash: Bytes!
+
+  "All provenance records ever submitted for this dataset, newest first via query ordering"
+  records: [ProvenanceRecord!]! @derivedFrom(field: "dataset")
+  sourceCount: Int!
+  transformationCount: Int!
+  attestationCount: Int!
+}
+
+enum RecordType {
+  SOURCE
+  TRANSFORMATION
+  ATTESTATION
+}
+
+"""
+One node in a dataset's provenance graph: a source ingestion, a
+transformation step, or an attestation. Corrections form a linked list via
+`supersedes` / `supersededBy`; transformations and attestations link to
+their parents via `refs`.
+"""
+type ProvenanceRecord @entity {
+  id: ID! # recordId as string
+  recordId: BigInt!
+  dataset: Dataset!
+  recordType: RecordType!
+  submitter: Bytes!
+  contentHash: Bytes!
+  uri: String!
+  method: String!
+
+  "Parent record ids this record references (inputs for a transformation, target for an attestation)"
+  refs: [ProvenanceRecord!]!
+  refIds: [BigInt!]!
+
+  "Record this one corrects, if any"
+  supersedes: ProvenanceRecord
+  "Record(s) that corrected this one, if any"
+  supersededBy: [ProvenanceRecord!]! @derivedFrom(field: "supersedes")
+
+  "Attestations that target this record (only populated when recordType is SOURCE or TRANSFORMATION)"
+  attestations: [ProvenanceRecord!]! @derivedFrom(field: "refs")
+
+  revoked: Boolean!
+  revokedReason: String
+  revokedBy: Bytes
+  revokedAt: BigInt
+
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  txHash: Bytes!
+}
+
+"""
+Flat, append-only audit log mirroring on-chain events 1:1 — useful for
+timeline UIs and for verifying the indexer hasn't dropped or reordered
+anything relative to chain history.
+"""
+type ProvenanceEvent @entity(immutable: true) {
+  id: ID! # txHash-logIndex
+  dataset: Dataset!
+  record: ProvenanceRecord
+  eventType: String! # "DatasetRegistered" | "RecordAdded" | "AttestationRevoked"
+  actor: Bytes!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  txHash: Bytes!
+}
