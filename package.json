@@ -1,0 +1,20 @@
+{
+  "name": "eco-provenance-registry",
+  "version": "0.1.0",
+  "description": "On-chain provenance registry for ecological datasets: sources, transformations, and attestations, with a subgraph indexer for lineage queries.",
+  "license": "MIT",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:base-sepolia": "hardhat run scripts/deploy.js --network baseSepolia",
+    "deploy:base": "hardhat run scripts/deploy.js --network base",
+    "subgraph:codegen": "cd subgraph && graph codegen",
+    "subgraph:build": "cd subgraph && graph build",
+    "subgraph:deploy": "cd subgraph && graph deploy"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "dotenv": "^16.4.5",
+    "hardhat": "^2.22.0"
+  }
+}
