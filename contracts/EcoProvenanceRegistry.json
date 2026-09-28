@@ -1,0 +1,174 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint64", "name": "datasetId", "type": "uint64" },
+      { "indexed": true, "internalType": "address", "name": "owner", "type": "address" },
+      { "indexed": false, "internalType": "string", "name": "name", "type": "string" },
+      { "indexed": false, "internalType": "string", "name": "category", "type": "string" },
+      { "indexed": false, "internalType": "uint64", "name": "timestamp", "type": "uint64" }
+    ],
+    "name": "DatasetRegistered",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint64", "name": "recordId", "type": "uint64" },
+      { "indexed": true, "internalType": "uint64", "name": "datasetId", "type": "uint64" },
+      { "indexed": true, "internalType": "uint8", "name": "recordType", "type": "uint8" },
+      { "indexed": false, "internalType": "address", "name": "submitter", "type": "address" },
+      { "indexed": false, "internalType": "bytes32", "name": "contentHash", "type": "bytes32" },
+      { "indexed": false, "internalType": "string", "name": "uri", "type": "string" },
+      { "indexed": false, "internalType": "string", "name": "method", "type": "string" },
+      { "indexed": false, "internalType": "uint64[]", "name": "refIds", "type": "uint64[]" },
+      { "indexed": false, "internalType": "uint64", "name": "supersedes", "type": "uint64" },
+      { "indexed": false, "internalType": "uint64", "name": "timestamp", "type": "uint64" }
+    ],
+    "name": "RecordAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint64", "name": "recordId", "type": "uint64" },
+      { "indexed": true, "internalType": "address", "name": "revoker", "type": "address" },
+      { "indexed": false, "internalType": "string", "name": "reason", "type": "string" },
+      { "indexed": false, "internalType": "uint64", "name": "timestamp", "type": "uint64" }
+    ],
+    "name": "AttestationRevoked",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "string", "name": "name", "type": "string" },
+      { "internalType": "string", "name": "category", "type": "string" }
+    ],
+    "name": "registerDataset",
+    "outputs": [{ "internalType": "uint64", "name": "datasetId", "type": "uint64" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint64", "name": "datasetId", "type": "uint64" },
+      { "internalType": "bytes32", "name": "contentHash", "type": "bytes32" },
+      { "internalType": "string", "name": "uri", "type": "string" },
+      { "internalType": "string", "name": "method", "type": "string" }
+    ],
+    "name": "addSource",
+    "outputs": [{ "internalType": "uint64", "name": "recordId", "type": "uint64" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint64", "name": "datasetId", "type": "uint64" },
+      { "internalType": "bytes32", "name": "contentHash", "type": "bytes32" },
+      { "internalType": "string", "name": "uri", "type": "string" },
+      { "internalType": "string", "name": "method", "type": "string" },
+      { "internalType": "uint64[]", "name": "inputRecordIds", "type": "uint64[]" }
+    ],
+    "name": "addTransformation",
+    "outputs": [{ "internalType": "uint64", "name": "recordId", "type": "uint64" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint64", "name": "datasetId", "type": "uint64" },
+      { "internalType": "uint64", "name": "targetRecordId", "type": "uint64" },
+      { "internalType": "bytes32", "name": "contentHash", "type": "bytes32" },
+      { "internalType": "string", "name": "uri", "type": "string" },
+      { "internalType": "string", "name": "method", "type": "string" }
+    ],
+    "name": "attest",
+    "outputs": [{ "internalType": "uint64", "name": "recordId", "type": "uint64" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint64", "name": "datasetId", "type": "uint64" },
+      { "internalType": "uint64", "name": "recordIdToSupersede", "type": "uint64" },
+      { "internalType": "bytes32", "name": "contentHash", "type": "bytes32" },
+      { "internalType": "string", "name": "uri", "type": "string" },
+      { "internalType": "string", "name": "method", "type": "string" },
+      { "internalType": "uint64[]", "name": "refIds", "type": "uint64[]" }
+    ],
+    "name": "correctRecord",
+    "outputs": [{ "internalType": "uint64", "name": "recordId", "type": "uint64" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint64", "name": "recordId", "type": "uint64" },
+      { "internalType": "string", "name": "reason", "type": "string" }
+    ],
+    "name": "revokeAttestation",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint64", "name": "recordId", "type": "uint64" }],
+    "name": "getRecord",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "uint64", "name": "id", "type": "uint64" },
+          { "internalType": "uint64", "name": "datasetId", "type": "uint64" },
+          { "internalType": "uint8", "name": "recordType", "type": "uint8" },
+          { "internalType": "address", "name": "submitter", "type": "address" },
+          { "internalType": "bytes32", "name": "contentHash", "type": "bytes32" },
+          { "internalType": "string", "name": "uri", "type": "string" },
+          { "internalType": "string", "name": "method", "type": "string" },
+          { "internalType": "uint64[]", "name": "refIds", "type": "uint64[]" },
+          { "internalType": "uint64", "name": "supersedes", "type": "uint64" },
+          { "internalType": "uint64", "name": "timestamp", "type": "uint64" }
+        ],
+        "internalType": "struct EcoProvenanceRegistry.Record",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint64", "name": "datasetId", "type": "uint64" }],
+    "name": "getDatasetRecordIds",
+    "outputs": [{ "internalType": "uint64[]", "name": "", "type": "uint64[]" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "recordCount",
+    "outputs": [{ "internalType": "uint64", "name": "", "type": "uint64" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "datasetCount",
+    "outputs": [{ "internalType": "uint64", "name": "", "type": "uint64" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint64", "name": "", "type": "uint64" }],
+    "name": "datasets",
+    "outputs": [
+      { "internalType": "uint64", "name": "id", "type": "uint64" },
+      { "internalType": "address", "name": "owner", "type": "address" },
+      { "internalType": "string", "name": "name", "type": "string" },
+      { "internalType": "string", "name": "category", "type": "string" },
+      { "internalType": "uint64", "name": "createdAt", "type": "uint64" },
+      { "internalType": "bool", "name": "exists", "type": "bool" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
